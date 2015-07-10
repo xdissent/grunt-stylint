@@ -26,19 +26,23 @@ module.exports = function (grunt) {
       outputFile: false
     });
 
+    // Load config file
     if (options.configFile) {
       var config = grunt.file.readJSON(options.configFile);
       options.config = grunt.util._.extend({}, config, options.config);
     }
 
+    // Fail on empty files list
     if (this.filesSrc.length === 0) {
       grunt.log.writeln(color('magenta', 'Could not find any files.'));
       return false;
     }
 
+    // Global success flag and results for each linted file
     var success = true;
     var results = {};
 
+    // Lint each file
     this.filesSrc.forEach(function (file) {
       stylint(file, options.config).methods({
         read: function () {
@@ -53,19 +57,34 @@ module.exports = function (grunt) {
             errors: this.cache.errs.slice(),
             warnings: this.cache.warnings.slice()
           };
-          if (success && this.cache.errs.length > 0) {
+
+          var hasErrors = this.cache.errs.length > 0;
+          var hasWarnings = this.cache.warnings.length > 0;
+
+          // Store success state
+          if (success && hasErrors) {
             success = false;
           }
-          if (!options.quiet) {
-            grunt.log.writeln([color('yellow', this.cache.warnings, '\n\n'),
-              color('red', this.cache.errs, '\n\n')].join('\n\n'));
+
+          // Log output
+          if (!options.quiet && (hasErrors || hasWarnings)) {
+            var out = [];
+            if (hasWarnings) {
+              out.push(color('yellow', this.cache.warnings, '\n\n'));
+            }
+            if (hasErrors) {
+              out.push(color('red', this.cache.errs, '\n\n'));
+            }
+            grunt.log.writeln(out.join('\n\n'));
           }
+
           // HACK: reset stylint, since it accidentally shares global state
           this.resetOnChange();
         }
       }).create();
     });
 
+    // Write output file
     if (options.outputFile) {
       grunt.file.write(options.outputFile, JSON.stringify(results));
     }
