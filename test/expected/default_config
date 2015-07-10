@@ -1,0 +1,1 @@
+{"test/fixtures/test.styl":{"errors":[],"warnings":["Warning: missing colon between property and value\nFile: test/fixtures/test.styl\nLine: 5: color red"]}}

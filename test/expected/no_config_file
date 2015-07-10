@@ -1,0 +1,1 @@
+{"test/fixtures/test.styl":{"errors":[],"warnings":["Warning: variables and parameters must be prefixed with the $ sign\nFile: test/fixtures/test.styl\nLine: 2: font-size = 14px"]}}
