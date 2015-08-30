@@ -9,6 +9,7 @@
 'use strict';
 
 var stylint = require('stylint');
+var stripJsonComments = require('strip-json-comments');
 
 module.exports = function (grunt) {
 
@@ -28,7 +29,13 @@ module.exports = function (grunt) {
 
     // Load config file
     if (options.configFile) {
-      var config = grunt.file.readJSON(options.configFile);
+      var config = grunt.file.read(options.configFile);
+      try {
+        config = JSON.parse(stripJsonComments(config));
+      } catch (err) {
+        grunt.log.writeln(color('magenta', 'Could not parse config file.'));
+        return false;
+      }
       options.config = grunt.util._.extend({}, config, options.config);
     }
 
