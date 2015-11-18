@@ -50,6 +50,15 @@ module.exports = function(grunt) {
           config: {prefixVarsWithDollar: 'always'}
         },
         src: ['test/fixtures/test.styl']
+      },
+      no_files: {
+        options: {
+          outputFile: 'tmp/config_with_missing_files',
+          config: {
+            ignoreMissingFiles: true
+          }
+        },
+        src: ['test/fixtures/missing.styl'] //Non-existent file name
       }
     },
     // Unit tests.
