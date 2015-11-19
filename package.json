@@ -1,7 +1,7 @@
 {
-  "name": "grunt-stylint-v2",
+  "name": "grunt-stylint-v3",
   "description": "Validate stylus files with stylint",
-  "version": "0.1.5",
+  "version": "0.1.2",
   "homepage": "https://github.com/vanyadymousky/grunt-stylint",
   "author": {
     "name": "Ivan Dymousky",
