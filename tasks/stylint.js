@@ -13,19 +13,24 @@ var stripJsonComments = require('strip-json-comments');
 
 module.exports = function (grunt) {
 
+  function createWarnings (messages) {
+    return color('yellow', messages, '\n\n');
+  }
+
   function color (col, msg, sep) {
     sep = sep || '';
     return grunt.log.wordlist([].concat(msg), {color: col, separator: sep});
   }
 
   grunt.registerMultiTask('stylint', 'Validate stylus files with stylint', function () {
-
+    var COULD_NOT_FIND_FILES_ERROR = 'Could not find any files.';
     var options = this.options({
       quiet: false,
       configFile: '.stylintrc',
       config: {},
       outputFile: false
     });
+    var hasFiles = this.filesSrc.length !== 0;
 
     // Load config file
     if (options.configFile) {
@@ -40,14 +45,27 @@ module.exports = function (grunt) {
     }
 
     // Fail on empty files list
-    if (this.filesSrc.length === 0) {
-      grunt.log.writeln(color('magenta', 'Could not find any files.'));
+    if (!options.config.ignoreMissingFiles && !hasFiles) {
+      grunt.log.writeln(color('magenta', COULD_NOT_FIND_FILES_ERROR));
       return false;
     }
 
     // Global success flag and results for each linted file
     var success = true;
     var results = {};
+
+    /**
+     * No files - every source should be in results with warning
+     */
+    if (!hasFiles) {
+      grunt.log.writeln(createWarnings(COULD_NOT_FIND_FILES_ERROR));
+      (this.data.src || this.data).map(function (src) {
+        results[src] = {
+          errors: [],
+          warnings: [COULD_NOT_FIND_FILES_ERROR]
+        };
+      });
+    }
 
     // Lint each file
     this.filesSrc.forEach(function (file) {
@@ -77,7 +95,7 @@ module.exports = function (grunt) {
           if (!options.quiet && (hasErrors || hasWarnings)) {
             var out = [];
             if (hasWarnings) {
-              out.push(color('yellow', this.cache.warnings, '\n\n'));
+              out.push(createWarnings(this.cache.warnings));
             }
             if (hasErrors) {
               out.push(color('red', this.cache.errs, '\n\n'));

@@ -54,4 +54,11 @@ exports.stylint = {
 
     test.done();
   },
+  no_files: function (test) {
+    test.expect(1);
+    var actual = grunt.file.read('tmp/config_with_missing_files');
+    var expected = grunt.file.read('test/expected/config_with_missing_files');
+    test.equal(actual, expected, 'should pass with no files processed and render warning that files are missing.');
+    test.done();
+  }
 };
