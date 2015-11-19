@@ -1,5 +1,7 @@
 # grunt-stylint
 
+This is a fork of https://github.com/xdissent/grunt-stylint
+
 > Validate stylus files with stylint
 
 ## Getting Started

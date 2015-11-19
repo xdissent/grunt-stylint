@@ -59,11 +59,11 @@ module.exports = function (grunt) {
      */
     if (!hasFiles) {
       grunt.log.writeln(createWarnings(COULD_NOT_FIND_FILES_ERROR));
-      this.data.src.map(function (src) {
+      (this.data.src || this.data).map(function (src) {
         results[src] = {
           errors: [],
           warnings: [COULD_NOT_FIND_FILES_ERROR]
-        }
+        };
       });
     }
 
