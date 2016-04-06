@@ -41,6 +41,7 @@
   ],
   "dependencies": {
     "strip-json-comments": "^2.0.1",
-    "stylint": "^1.0.9"
+    "stylint": "^1.0.9",
+    "lodash": "^4.8.2"
   }
 }
