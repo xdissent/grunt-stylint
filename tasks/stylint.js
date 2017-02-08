@@ -10,6 +10,7 @@
 
 var stylint = require('stylint');
 var stripJsonComments = require('strip-json-comments');
+var _ = require('lodash');
 
 module.exports = function (grunt) {
 
@@ -36,7 +37,7 @@ module.exports = function (grunt) {
         grunt.log.writeln(color('magenta', 'Could not parse config file.'));
         return false;
       }
-      options.config = grunt.util._.extend({}, config, options.config);
+      options.config = _.extend({}, config, options.config);
     }
 
     // Fail on empty files list
